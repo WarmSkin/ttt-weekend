@@ -16,7 +16,7 @@ section.board {
   grid-gap: 0vmin;
 }
 
-div {
+section .sqr{
   border: 3px solid black;
   font-size: 8vmin;
   text-align: center;
