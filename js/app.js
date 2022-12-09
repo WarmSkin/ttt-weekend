@@ -6,16 +6,16 @@ Description: Using 2 dimentional array to represent the ttt board data.
 /*-------------------------------- Constants --------------------------------*/
 const board = [
     [0,0,0],
-    [0,5,0],
+    [0,0,0],
     [0,0,0]
 ]
 
 //winStack index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
-const winStack = [0,0,0,0,5,0,0,0];
+const winStack = [0,0,0,0,0,0,0,0];
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Move = true, isWin = false;
-let index1, index2;
+let index1, index2, moveCount = 0;
 
 
 /*------------------------ Cached Element References ------------------------*/
@@ -45,7 +45,8 @@ function updateGameStatus(e) {
     let id = e.target.id;
     index1 = +id[0];
     index2 = +id[1];
-    if(!board[index1][index2]){
+    if(!board[index1][index2]) {
+        moveCount++;
         //update html block
         e.target.textContent = player1Move ? "X" : "O";
         //update board data
@@ -83,7 +84,14 @@ function render() {
         messageEl.textContent = 
         (`The Winner is ${player1Move ? "Player1" : "Player2"} !`)
     }
-    if(!isWin) player1Move = !player1Move;
+    else {
+        if(moveCount === 9) 
+            messageEl.textContent = `Nice try. But it is a tie! `
+        else {
+            player1Move = !player1Move;
+            messageEl.textContent = `${player1Move ? "Player1" : "Player2"}'s turn:`
+        }
+    }
 }
 
 function reset() {
@@ -91,6 +99,7 @@ function reset() {
     isWin = false;
     winStack.forEach((x,i) => winStack[i] = 0);
     board.forEach(x => x.forEach((x, i, arr) => arr[i] = 0));
+    // for( let x in board) x = 0;
     messageEl.textContent = "Welcome to Tic-Tac-Toe";
     boardEl.childNodes.forEach(x => x.textContent = "");
     console.log("reset");
