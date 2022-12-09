@@ -6,12 +6,12 @@ Description: Using 2 dimentional array to represent the ttt board data.
 /*-------------------------------- Constants --------------------------------*/
 const board = [
     [0,0,0],
-    [0,0,0],
+    [0,5,0],
     [0,0,0]
 ]
 
 //winStack index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
-const winStack = [0,0,0,0,0,0,0,0];
+const winStack = [0,0,0,0,5,0,0,0];
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Move = true, isWin = false;
@@ -19,11 +19,12 @@ let index1, index2;
 
 
 /*------------------------ Cached Element References ------------------------*/
-
-
+let messageEl = document.getElementById("message");
+let boardEl = document.querySelector(".board");
 
 /*----------------------------- Event Listeners -----------------------------*/
-document.querySelector(".board").addEventListener('click', play);
+boardEl.addEventListener('click', play);
+document.querySelector("#reset").addEventListener('click', reset);
 
 
 /*-------------------------------- Functions --------------------------------*/
@@ -35,6 +36,12 @@ function play(e) {
 }
 
 function playerMove(e){
+    if(!isWin) {
+        updateGameStatus(e);
+    }
+}
+
+function updateGameStatus(e) {
     let id = e.target.id;
     index1 = +id[0];
     index2 = +id[1];
@@ -73,8 +80,20 @@ function checkWinner() {
 
 function render() {
     if(isWin){
-        document.getElementById("message").textContent = 
+        messageEl.textContent = 
         (`The Winner is ${player1Move ? "Player1" : "Player2"} !`)
     }
-    player1Move = !player1Move;
+    if(!isWin) player1Move = !player1Move;
+}
+
+function reset() {
+    player1Move = true;
+    isWin = false;
+    winStack.forEach((x,i) => winStack[i] = 0);
+    board.forEach(x => x.forEach((x, i, arr) => arr[i] = 0));
+    messageEl.textContent = "Welcome to Tic-Tac-Toe";
+    boardEl.childNodes.forEach(x => x.textContent = "");
+    console.log("reset");
+    console.log(board);
+    console.log(winStack);
 }
