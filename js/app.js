@@ -14,17 +14,19 @@ const board = [
 const winStack = [0,0,0,0,0,0,0,0];
 
 /*---------------------------- Variables (state) ----------------------------*/
-let player1Move = true, isWin = false;
+let player1Turn = true, playerMoved = false, isWin = false;
 let index1, index2, moveCount = 0;
 
 
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
 let boardEl = document.querySelector(".board");
+let statusEl = document.querySelector(".status");
 
 /*----------------------------- Event Listeners -----------------------------*/
 boardEl.addEventListener('click', play);
 document.querySelector("#reset").addEventListener('click', reset);
+
 
 
 /*-------------------------------- Functions --------------------------------*/
@@ -33,6 +35,7 @@ function play(e) {
     playerMove(e);
     checkWinner();
     render();
+    updateStatusTable();
 }
 
 function playerMove(e){
@@ -47,13 +50,15 @@ function updateGameStatus(e) {
     index2 = +id[1];
     if(!board[index1][index2]) {
         moveCount++;
+        playerMoved = true;
         //update html block
-        e.target.textContent = player1Move ? "X" : "O";
+        // console.dir(e.target);
+        e.target.children[0].src = player1Turn ? "https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-512" : "https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512";
         //update board data
-        board[index1][index2] = player1Move ? 1 : -1;
+        board[index1][index2] = player1Turn ? 1 : -1;
 
         //updata winStack data -- yeah, all about math here.
-        let value = player1Move ? 1 : -1;
+        let value = player1Turn ? 1 : -1;
         winStack[index1] += value;
         winStack[index2 + 3] += value;
         if(index1 === index2)
@@ -82,27 +87,34 @@ function checkWinner() {
 function render() {
     if(isWin){
         messageEl.textContent = 
-        (`The Winner is ${player1Move ? "Player1" : "Player2"} !`)
+        (`The Winner is ${player1Turn ? "Player1" : "Player2"} !`)
     }
     else {
         if(moveCount === 9) 
             messageEl.textContent = `Nice try. But it is a tie! `
-        else {
-            player1Move = !player1Move;
-            messageEl.textContent = `${player1Move ? "Player1" : "Player2"}'s turn:`
+        else if (playerMoved){
+            player1Turn = !player1Turn;
+            playerMoved = false;
+            messageEl.textContent = `${player1Turn ? "Player1" : "Player2"}'s turn:`
         }
     }
 }
 
 function reset() {
-    player1Move = true;
+    player1Turn = true;
     isWin = false;
+    moveCount = 0;
     winStack.forEach((x,i) => winStack[i] = 0);
     board.forEach(x => x.forEach((x, i, arr) => arr[i] = 0));
-    // for( let x in board) x = 0;
     messageEl.textContent = "Welcome to Tic-Tac-Toe";
     boardEl.childNodes.forEach(x => x.textContent = "");
-    console.log("reset");
-    console.log(board);
-    console.log(winStack);
+
+    //reset on board staus
+    for(let i = 0; i < 9; i++)
+        document.getElementById(`${i}`).textContent = winStack[i];
+}
+
+function updateStatusTable() {
+    for(let i = 0; i < 9; i++)
+        document.getElementById(`${i}`).textContent = winStack[i];
 }
