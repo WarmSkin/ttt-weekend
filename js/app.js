@@ -12,11 +12,15 @@ const board = [
 
 //winStaus index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
 const winStaus = [0,0,0,0,0,0,0,0];
+const imagSrc = ["https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-512",
+                 "https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512",
+                ]
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Turn = true, playerMoved = false, isWin = false;
-let index1, index2, moveCount = 0;
+let index1, index2, moveCount = 0, player1Imag, player2Imag;
 
+player1Imag = imagSrc[0], player2Imag = imagSrc[1];
 
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
@@ -54,7 +58,7 @@ function updateGameStatus(e) {
         let value = player1Turn ? 1 : -1;
         playerMoved = true;
         //update html block
-        e.target.children[0].src = player1Turn ? "https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-512" : "https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512";
+        e.target.children[0].src = player1Turn ? player1Imag : player2Imag ;
         //update board data
         board[index1][index2] = value;
 

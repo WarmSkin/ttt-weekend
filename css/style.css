@@ -40,3 +40,25 @@ body .status {
 .sqr img {
   height: 25vmin;
 }
+
+#mid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.playerImag {
+  display: flex;
+  flex-direction: column;
+}
+
+.playerImag .but {
+  width: 90px;
+  align-self: center;
+  margin: -30px;
+}
+#imgLeft, #imgRight {
+  height: 30vmin;
+  margin: 60px;
+  border: 5px solid mediumseagreen;
+}
