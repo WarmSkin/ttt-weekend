@@ -3,6 +3,7 @@ Date: 12/9/2022
 Description: Using 2 dimentional array to represent the ttt board data.
             Use sum of each direction of board to determine a winner. 
 */
+import imagSrc from "./data.js";
 /*-------------------------------- Constants --------------------------------*/
 const board = [
     [0,0,0],
@@ -12,9 +13,7 @@ const board = [
 
 //winStaus index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
 const winStaus = [0,0,0,0,0,0,0,0];
-const imagSrc = ["https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-512",
-                 "https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512",
-                ]
+
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Turn = true, playerMoved = false, isWin = false;
@@ -25,7 +24,7 @@ player1Imag = imagSrc[0], player2Imag = imagSrc[1];
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
 let boardEl = document.querySelector(".board");
-let statusEl = document.querySelector(".status");
+// let statusEl = document.querySelector(".status");
 let imgEl = document.querySelectorAll(".img1")
 
 /*----------------------------- Event Listeners -----------------------------*/
