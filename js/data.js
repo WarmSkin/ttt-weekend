@@ -2,7 +2,7 @@ const imagSrc = [`https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-5
                  `https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512`,
                  `https://ca.slack-edge.com/T0351JZQ0-U04BMTJE8TB-d5fe87758a51-512`,
                  `https://ca.slack-edge.com/T0351JZQ0-U04BBN6B2R2-751e61d6ed53-512`,
-                 `https://ca.slack-edge.com/T0351JZQ0-U04B2LERJ2J-fa8ff2d79abd-512`
+                 `https://ca.slack-edge.com/T0351JZQ0-U04B2LERJ2J-fa8ff2d79abd-512`,
                  `https://ca.slack-edge.com/T0351JZQ0-UT1JAQR0Q-7ab74d732544-512`,
                  `https://ca.slack-edge.com/T0351JZQ0-U03EB6WPPMM-ceccd64fca04-512`,
                  `https://ca.slack-edge.com/T0351JZQ0-U04BYV86BC0-7a6ccb1b84c9-512`,
@@ -46,11 +46,12 @@ const imagSrc = [`https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-5
                 ]
 
 
-cosnt nameData =[`Hunter Long`,`Jurgen Stevens`,`Alex Jones`,`Austin Friesorger`,`Ayala Murúch`,`Ben Manley`,
+const nameData =[`Hunter Long`,`Jurgen Stevens`,`Alex Jones`,`Austin Friesorger`,`Ayala Murúch`,`Ben Manley`,
                 `Beryl Baldwin`,`Carlos Salguera`,`Cody Kilpatrick`,"D'Arco Tolliver",`Danielle Colucci`,`David Stinson`,
                 `Dayana Little`,`Devorius Harris`,`Dhruvin Patel`,`Drew Neece`,`Em Gordon`,`Emily Lascano`,`Emmanuel Maldonado`,
                 `Ian Terada`,`Izabela Szeremeta`,`Jackson Reeves`,`Jeremy J Robinson`,`Joe Malatesta`,`Juan Garcia`,
                 `Justin Pastine`,`Kauthar Mumin`,`Kevin Harrington`,`Kevin Roost`,`Kiana Vernon`,`Lauren Tozzi`,`Mariah Lara`,
                 `Mark Getchis`,`Mark Pasadilla`,`Mary Lueder`,`Megan Smith`,`Michael Robles`,`Miguel Robledo`,`Oscar Nunez`,
                 `Patrick Kelly`,`Patrick Mazara`,`Pin Chen`,`Robert Fridlender`,`Ryan Merica`,`Will Szeto`]
-export default imagSrc
+
+export {nameData,imagSrc};

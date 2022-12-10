@@ -3,7 +3,7 @@ Date: 12/9/2022
 Description: Using 2 dimentional array to represent the ttt board data.
             Use sum of each direction of board to determine a winner. 
 */
-import imagSrc from "./data.js";
+import {imagSrc, nameData} from "./data.js";
 /*-------------------------------- Constants --------------------------------*/
 const board = [
     [0,0,0],
@@ -19,21 +19,27 @@ const winStaus = [0,0,0,0,0,0,0,0];
 let player1Turn = true, playerMoved = false, isWin = false;
 let index1, index2, moveCount = 0, player1Imag, player2Imag;
 
-player1Imag = imagSrc[0], player2Imag = imagSrc[1];
 
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
 let boardEl = document.querySelector(".board");
 // let statusEl = document.querySelector(".status");
-let imgEl = document.querySelectorAll(".img1")
+let imgEl = document.querySelectorAll(".img1");
+let player1NameEl = document.querySelector("#bt0");
+let player2NameEl = document.querySelector("#bt1")
 
 /*----------------------------- Event Listeners -----------------------------*/
 boardEl.addEventListener('click', play);
 document.querySelector("#reset").addEventListener('click', reset);
+player1NameEl.addEventListener('click', randomPick);
+player2NameEl.addEventListener('click', randomPick);
 
 
 
 /*-------------------------------- Functions --------------------------------*/
+player1Imag = imagSrc[0], player2Imag = imagSrc[1];
+player1NameEl.textContent = nameData[0], player2NameEl.textContent = nameData[1];
+
 
 function play(e) {
     playerMove(e);
@@ -91,7 +97,7 @@ function checkWinner() {
 function render() {
     if(isWin){
         messageEl.textContent = 
-        (`The Winner is ${player1Turn ? "Player1" : "Player2"} !`)
+        (`The Winner is ${player1Turn ? player1NameEl.textContent : player2NameEl.textContent} !`)
     }
     else {
         if(moveCount === 9) 
@@ -119,4 +125,19 @@ function reset() {
 function updateStatusTable() {
     for(let i = 0; i < 8; i++)
         document.getElementById(`${i}`).textContent = winStaus[i];
+}
+
+function randomPick(e) {
+    let randomIndex = Math.floor(Math.random()*nameData.length);
+    if(e.target.id === 'bt0'){
+        player1Imag  = imagSrc[randomIndex];
+        player1NameEl.textContent = nameData[randomIndex];
+        document.querySelector("#imgLeft").src = player1Imag;
+    }
+    else {
+        player2Imag  = imagSrc[randomIndex];
+        player2NameEl.textContent = nameData[randomIndex];
+        document.querySelector("#imgRight").src = player2Imag;
+    }
+
 }
