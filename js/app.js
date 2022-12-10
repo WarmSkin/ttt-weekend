@@ -10,8 +10,8 @@ const board = [
     [0,0,0]
 ]
 
-//winStack index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
-const winStack = [0,0,0,0,0,0,0,0];
+//winStaus index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
+const winStaus = [0,0,0,0,0,0,0,0];
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Turn = true, playerMoved = false, isWin = false;
@@ -22,6 +22,7 @@ let index1, index2, moveCount = 0;
 let messageEl = document.getElementById("message");
 let boardEl = document.querySelector(".board");
 let statusEl = document.querySelector(".status");
+let imgEl = document.querySelectorAll(".img1")
 
 /*----------------------------- Event Listeners -----------------------------*/
 boardEl.addEventListener('click', play);
@@ -50,38 +51,38 @@ function updateGameStatus(e) {
     index2 = +id[1];
     if(!board[index1][index2]) {
         moveCount++;
+        let value = player1Turn ? 1 : -1;
         playerMoved = true;
         //update html block
-        // console.dir(e.target);
         e.target.children[0].src = player1Turn ? "https://ca.slack-edge.com/T0351JZQ0-U01B1M6SFE2-4835b653f856-512" : "https://ca.slack-edge.com/T0351JZQ0-UK7P5G0MA-2ddc03a7fe54-512";
         //update board data
-        board[index1][index2] = player1Turn ? 1 : -1;
+        board[index1][index2] = value;
 
-        //updata winStack data -- yeah, all about math here.
-        let value = player1Turn ? 1 : -1;
-        winStack[index1] += value;
-        winStack[index2 + 3] += value;
+        //updata winStaus data -- yeah, all about math here.
+        
+        winStaus[index1] += value;
+        winStaus[index2 + 3] += value;
         if(index1 === index2)
-            winStack[6] += value;
+            winStaus[6] += value;
         if(index1 + index2 === 2)
-            winStack[7] += value;
+            winStaus[7] += value;
     }
 }
 
 // function checkWinner() {
-//     winStack[0] = board[0][0] + board[0][1] + board[0][2];
-//     winStack[1] = board[1][0] + board[1][1] + board[1][2];
-//     winStack[2] = board[2][0] + board[2][1] + board[2][2];
-//     winStack[3] = board[0][0] + board[1][0] + board[2][0];
-//     winStack[4] = board[0][1] + board[1][1] + board[2][1];
-//     winStack[5] = board[0][2] + board[1][2] + board[2][2];
-//     winStack[6] = board[0][0] + board[1][1] + board[2][2];
-//     winStack[7] = board[0][2] + board[1][1] + board[2][0];
-//     isWin = winStack.some(x => x === 3 || x === -3);
+//     winStaus[0] = board[0][0] + board[0][1] + board[0][2];
+//     winStaus[1] = board[1][0] + board[1][1] + board[1][2];
+//     winStaus[2] = board[2][0] + board[2][1] + board[2][2];
+//     winStaus[3] = board[0][0] + board[1][0] + board[2][0];
+//     winStaus[4] = board[0][1] + board[1][1] + board[2][1];
+//     winStaus[5] = board[0][2] + board[1][2] + board[2][2];
+//     winStaus[6] = board[0][0] + board[1][1] + board[2][2];
+//     winStaus[7] = board[0][2] + board[1][1] + board[2][0];
+//     isWin = winStaus.some(x => x === 3 || x === -3);
 // }
 
 function checkWinner() {
-    isWin = winStack.some(x => x === 3 || x === -3);
+    isWin = winStaus.some(x => x === 3 || x === -3);
 }
 
 function render() {
@@ -104,17 +105,15 @@ function reset() {
     player1Turn = true;
     isWin = false;
     moveCount = 0;
-    winStack.forEach((x,i) => winStack[i] = 0);
+    winStaus.forEach((x,i) => winStaus[i] = 0);
     board.forEach(x => x.forEach((x, i, arr) => arr[i] = 0));
     messageEl.textContent = "Welcome to Tic-Tac-Toe";
-    boardEl.childNodes.forEach(x => x.textContent = "");
-
+    imgEl.forEach(x => x.src = "");
     //reset on board staus
-    for(let i = 0; i < 9; i++)
-        document.getElementById(`${i}`).textContent = winStack[i];
+    updateStatusTable();
 }
 
 function updateStatusTable() {
-    for(let i = 0; i < 9; i++)
-        document.getElementById(`${i}`).textContent = winStack[i];
+    for(let i = 0; i < 8; i++)
+        document.getElementById(`${i}`).textContent = winStaus[i];
 }
