@@ -26,7 +26,9 @@ let boardEl = document.querySelector(".board");
 // let statusEl = document.querySelector(".status");
 let imgEl = document.querySelectorAll(".img1");
 let player1NameEl = document.querySelector("#bt0");
-let player2NameEl = document.querySelector("#bt1")
+let player2NameEl = document.querySelector("#bt1");
+let imgLeftEl = document.querySelector("#imgLeft");
+let imgRightEl = document.querySelector("#imgRight");
 
 /*----------------------------- Event Listeners -----------------------------*/
 boardEl.addEventListener('click', play);
@@ -98,6 +100,8 @@ function render() {
     if(isWin){
         messageEl.textContent = 
         (`The Winner is ${player1Turn ? player1NameEl.textContent : player2NameEl.textContent} !`)
+        confetti.start(1500);
+        animateCSS(`${player1Turn ? "#imgLeft" : "#imgRight"}`, 'bounce');
     }
     else {
         if(moveCount === 9) 
@@ -105,7 +109,7 @@ function render() {
         else if (playerMoved){
             player1Turn = !player1Turn;
             playerMoved = false;
-            messageEl.textContent = `${player1Turn ? "Player1" : "Player2"}'s turn:`
+            messageEl.textContent = `${player1Turn ? player1NameEl.textContent : player2NameEl.textContent}'s turn:`;
         }
     }
 }
@@ -128,16 +132,42 @@ function updateStatusTable() {
 }
 
 function randomPick(e) {
+
+    // imgRightEl.classList.remove('animate__animated', 'animate__bounce');
+    // imgLeftEl.classList.remove('animate__animated', 'animate__bounce');
     let randomIndex = Math.floor(Math.random()*nameData.length);
+    
     if(e.target.id === 'bt0'){
         player1Imag  = imagSrc[randomIndex];
         player1NameEl.textContent = nameData[randomIndex];
-        document.querySelector("#imgLeft").src = player1Imag;
+        imgLeftEl.src = player1Imag;
+        animateCSS('#imgLeft', 'bounce');
     }
     else {
         player2Imag  = imagSrc[randomIndex];
         player2NameEl.textContent = nameData[randomIndex];
-        document.querySelector("#imgRight").src = player2Imag;
+        imgRightEl.src = player2Imag;
+        animateCSS('#imgRight', 'bounce');
+    }
+    
+}
+
+
+//copied from animate.style
+const animateCSS = (element, animation, prefix = 'animate__') =>
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    const animationName = `${prefix}${animation}`;
+    const node = document.querySelector(element);
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+      resolve('Animation ended');
     }
 
-}
+    node.addEventListener('animationend', handleAnimationEnd, {once: true});
+  });
