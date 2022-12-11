@@ -1,7 +1,7 @@
-.WebContainer{
+/* .WebContainer{
   width:100%;
   height:100%;
-}
+} */
 body {
   background-color: gray;
 	/* Use a system font, if none are available use an available sans-sarif   font */
@@ -9,10 +9,15 @@ body {
 	Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	margin: 0;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  
   border: 2px solid black;
 
+}
+body .bodyDiv{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 h2,h3 {
   align-self: center;
