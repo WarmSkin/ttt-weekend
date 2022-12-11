@@ -17,7 +17,7 @@ const winStaus = [0,0,0,0,0,0,0,0];
 
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Turn = true, playerMoved = false, isWin = false;
-let index1, index2, moveCount = 0, player1Imag, player2Imag;
+let index1, index2, moveCount = 0, player1Imag, player2Imag, aiMove = false;
 
 
 /*------------------------ Cached Element References ------------------------*/
@@ -35,6 +35,7 @@ boardEl.addEventListener('click', play);
 document.querySelector("#reset").addEventListener('click', reset);
 player1NameEl.addEventListener('click', randomPick);
 player2NameEl.addEventListener('click', randomPick);
+document.querySelector("#AI").addEventListener('click', e => aiMove = !aiMove);
 
 
 
@@ -45,6 +46,7 @@ player1NameEl.textContent = nameData[0], player2NameEl.textContent = nameData[1]
 
 function play(e) {
     playerMove(e);
+    computerMove();
     checkWinner();
     render();
     updateStatusTable();
@@ -55,7 +57,19 @@ function playerMove(e){
         updateGameStatus(e);
     }
 }
-
+function computerMove() {
+    if(computerMove){
+        toWinMove();//if there is any move make sum to -3
+        defMove();//check if there is any move make sum of 3, or 2 sums of 2.
+        attackMove();//check if there is any move make 2 sums of -2. if not, make the most sum move.
+    }
+    // winStaus[index1] += value;
+    //     winStaus[index2 + 3] += value;
+    //     if(index1 === index2)
+    //         winStaus[6] += value;
+    //     if(index1 + index2 === 2)
+    //         winStaus[7] += value;     //use this to simulate.
+}
 function updateGameStatus(e) {
     let id = e.target.id;
     index1 = +id[0];
@@ -69,7 +83,7 @@ function updateGameStatus(e) {
         //update board data
         board[index1][index2] = value;
 
-        //updata winStaus data -- yeah, all about math here.
+        //updata winStaus data -- reduced from the checkWinner function below.
         
         winStaus[index1] += value;
         winStaus[index2 + 3] += value;
@@ -80,6 +94,9 @@ function updateGameStatus(e) {
     }
 }
 
+function checkWinner() {
+    isWin = winStaus.some(x => x === 3 || x === -3);
+}
 // function checkWinner() {
 //     winStaus[0] = board[0][0] + board[0][1] + board[0][2];
 //     winStaus[1] = board[1][0] + board[1][1] + board[1][2];
@@ -92,9 +109,6 @@ function updateGameStatus(e) {
 //     isWin = winStaus.some(x => x === 3 || x === -3);
 // }
 
-function checkWinner() {
-    isWin = winStaus.some(x => x === 3 || x === -3);
-}
 
 function render() {
     if(isWin){
@@ -131,10 +145,9 @@ function updateStatusTable() {
         document.getElementById(`${i}`).textContent = winStaus[i];
 }
 
+//random pick the player picture and the name.
 function randomPick(e) {
 
-    // imgRightEl.classList.remove('animate__animated', 'animate__bounce');
-    // imgLeftEl.classList.remove('animate__animated', 'animate__bounce');
     let randomIndex = Math.floor(Math.random()*nameData.length);
     
     if(e.target.id === 'bt0'){
@@ -151,7 +164,6 @@ function randomPick(e) {
     }
     
 }
-
 
 //copied from animate.style
 const animateCSS = (element, animation, prefix = 'animate__') =>
