@@ -4,14 +4,14 @@
 } */
 body {
   background-color: gray;
+  background-image: url(https://www.gifcen.com/wp-content/uploads/2022/04/wallpaper-gif-4.gif);
+  background-size: cover;
+  background-position: center;
 	/* Use a system font, if none are available use an available sans-sarif   font */
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
 	Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	margin: 0;
   height: 100vh;
-  
-  border: 2px solid black;
-
 }
 body .bodyDiv{
   display: flex;
@@ -35,6 +35,7 @@ section .sqr{
   font-size: 8vmin;
   text-align: center;
   vertical-align: middle;
+  border-radius: 360%;
 }
 
 section.But {
@@ -50,6 +51,8 @@ body .status {
 
 .sqr img {
   height: 20vmin;
+  border-radius: 360%;
+  margin: -2px;
 }
 
 #mid {
@@ -69,13 +72,19 @@ body .status {
   margin: -30px;
 }
 #imgLeft {
-  height: 30vmin;
+  height: 25vmin;
   margin: 60px;
   border: 5px solid rgb(23, 17, 213);
+  border-radius: 360%;
 }
 
 #imgRight {
-  height: 30vmin;
+  height: 25vmin;
   margin: 60px;
   border: 5px solid rgb(175, 13, 16);
+  border-radius: 360%;
+}
+
+.board {
+  opacity: 0%;
 }

@@ -16,7 +16,7 @@ const winStaus = [0,0,0,0,0,0,0,0];
 
 
 /*---------------------------- Variables (state) ----------------------------*/
-let player1Turn = true, playerMoved = false, isWin = false;
+let player1Turn = true, playerMoved = false, aiMoved = false, isWin = false, start = false;
 let index1, index2, moveCount = 0, player1Imag, player2Imag, moveValue;
 let aiMove = false, aiDefence = false, aiAttack = false;
 
@@ -36,7 +36,8 @@ boardEl.addEventListener('click', play);
 document.querySelector("#reset").addEventListener('click', reset);
 player1NameEl.addEventListener('click', randomPick);
 player2NameEl.addEventListener('click', randomPick);
-document.querySelector("#AI").addEventListener('click', e => aiMove = !aiMove);
+document.querySelector("#AI").addEventListener('click', aiEnable);
+document.querySelector("#start").addEventListener('click', startGame )
 
 
 
@@ -44,16 +45,36 @@ document.querySelector("#AI").addEventListener('click', e => aiMove = !aiMove);
 player1Imag = imagSrc[0], player2Imag = imagSrc[1];
 player1NameEl.textContent = nameData[0], player2NameEl.textContent = nameData[1];
 
+function startGame(e) {
+    start = true;
+    document.querySelector(".board").style.opacity = "1";
+    messageEl.textContent = `Game Start! ${player1NameEl.textContent}'s turn`;
+}
+
+function aiEnable(e) {
+    aiMove = !aiMove;
+    let aiPlayer = player1Turn ? player2NameEl : player1NameEl;
+    let nameStored = aiPlayer.textContent;
+    if(aiMove){
+        e.target.textContent = `😈${nameStored}`;
+    }
+    else{
+        e.target.textContent = "Play VS AI";
+    }
+}
 
 function play(e) {
-    playerMove(e);
-    checkWinner();
-    render();
-    console.log("player move finish");
-    if(aiMove && !isWin){
-        computerMove();
+    if(start){
+        playerMove(e);
         checkWinner();
         render();
+
+        //Ai's turn
+        if(aiMove && !isWin){
+            computerMove();
+            checkWinner();
+            render();
+        }
     }
     // updateStatusTable();
 }
@@ -75,15 +96,15 @@ function updateGameStatus(e) {
     if(!board[index1][index2]) {
         moveCount++;
         moveValue = player1Turn ? 1 : -1;
-        playerMoved = true;
+        if(e) playerMoved = true;
+        else aiMoved = true;
+
         //update html block
-        // document.getElementById(`${index1}${index2}`).src = player1Turn ? player1Imag : player2Imag ;
         document.getElementById(`${index1}${index2}`).children[0].src = player1Turn ? player1Imag : player2Imag ;
         //update board data
         board[index1][index2] = moveValue;
 
         //updata winStaus data -- reduced from the checkWinner function below.
-        
         winStaus[index1] += moveValue;
         winStaus[index2 + 3] += moveValue;
         if(index1 === index2) 
@@ -112,7 +133,7 @@ function checkWinner() {
 function render() {
     if(isWin){
         messageEl.textContent = 
-        (`The Winner is ${player1Turn ? player1NameEl.textContent : player2NameEl.textContent} !`)
+        (`The Winner is ${aiMoved? "😈": ""} ${player1Turn ? player1NameEl.textContent : player2NameEl.textContent} !`)
         confetti.start(1500);
         animateCSS(`${player1Turn ? "#imgLeft" : "#imgRight"}`, 'bounce');
     }
@@ -121,9 +142,10 @@ function render() {
             messageEl.textContent = `Nice try. But it is a tie! `
             aiMove = false;
         }
-        else if (playerMoved){
+        else if (playerMoved || aiMoved){
             player1Turn = !player1Turn;
             playerMoved = false;
+            aiMoved = false;
             messageEl.textContent = `${player1Turn ? player1NameEl.textContent : player2NameEl.textContent}'s turn:`;
         }
     }
@@ -138,6 +160,9 @@ function reset() {
     messageEl.textContent = "Welcome to Tic-Tac-Toe";
     imgEl.forEach(x => x.src = "");
     aiMove = false;
+    document.querySelector("#AI").textContent = "Play VS PC"
+    start = false;
+    document.querySelector(".board").style.opacity = "0";
     //reset on board staus
     // updateStatusTable();
 }
@@ -151,20 +176,25 @@ function reset() {
 //PLAYER PROFILE
 //####################################################################################
 function randomPick(e) {
+    if(!start){
+        let randomIndex = Math.floor(Math.random()*nameData.length);
+        
+        if(e.target.id === 'bt0'){
+            player1Imag  = imagSrc[randomIndex];
+            player1NameEl.textContent = nameData[randomIndex];
+            imgLeftEl.src = player1Imag;
+            animateCSS('#imgLeft', 'bounce');
+        }
+        else {
+            player2Imag  = imagSrc[randomIndex];
+            player2NameEl.textContent = nameData[randomIndex];
+            imgRightEl.src = player2Imag;
+            animateCSS('#imgRight', 'bounce');
+            if(aiMove)
+                document.querySelector("#AI").textContent = "😈" + nameData[randomIndex];
+        }
+        
 
-    let randomIndex = Math.floor(Math.random()*nameData.length);
-    
-    if(e.target.id === 'bt0'){
-        player1Imag  = imagSrc[randomIndex];
-        player1NameEl.textContent = nameData[randomIndex];
-        imgLeftEl.src = player1Imag;
-        animateCSS('#imgLeft', 'bounce');
-    }
-    else {
-        player2Imag  = imagSrc[randomIndex];
-        player2NameEl.textContent = nameData[randomIndex];
-        imgRightEl.src = player2Imag;
-        animateCSS('#imgRight', 'bounce');
     }
     
 }
