@@ -17,7 +17,7 @@ const winStaus = [0,0,0,0,0,0,0,0];
 /*---------------------------- Variables (state) ----------------------------*/
 let player1Turn = true, playerMoved = false, aiMoved = false, isWin = false, start = false, makeMove = false;
 let index1, index2, moveCount = 0, player1Imag = imagSrc[0], player2Imag = imagSrc[1], moveValue;
-let aiMove = false, aiDefence = false, aiAttack = false;
+let aiMode = false, aiDefence = false, aiAttack = false;
 const clickSoundEl = new Audio();
 
 clickSoundEl.setAttribute("src", "./css/audio/487588__ranner__ui-click.wav")
@@ -53,30 +53,37 @@ function startGame(e) {
 }
 
 function aiEnable(e) {
-    aiMove = !aiMove;
+    aiMode = !aiMode;
     let aiPlayer = player1Turn ? player2NameEl : player1NameEl;
     let nameStored = aiPlayer.textContent;
-    if(aiMove) e.target.textContent = `😈${nameStored}`;
+    if(aiMode) e.target.textContent = `😈${nameStored}`;
     else e.target.textContent = "Play VS AI";
 }
 
 function play(e) {
     if(start){
-        playerMove(e);
-        clickSoundEl.volume = 1;
-        clickSoundEl.play();
-        checkWinner();
-        render();
-
+        playerPlay(e);
         //Ai's turn
-        if(aiMove && !isWin && makeMove){
-            computerMove();
-            clickSoundEl.volume = 1;
-            clickSoundEl.play();
-            checkWinner();
-            render();
+        if(aiMode && !isWin && makeMove){
+            aiComputerPlay();
         }
     }
+}
+
+function playerPlay(e) {
+    playerMove(e);
+    clickSoundEl.volume = 1;
+    clickSoundEl.play();
+    checkWinner();
+    render();
+}
+
+function aiComputerPlay(){
+    computerMove();
+    clickSoundEl.volume = 1;
+    clickSoundEl.play();
+    checkWinner();
+    render();
 }
 
 function playerMove(e){
@@ -86,7 +93,7 @@ function playerMove(e){
 }
 
 function updateGameStatus(e) {
-    //if it is not aiMove, geting indexs from click target
+    //if it is not aiMode, geting indexs from click target
     if(e){
         //double check if it clicked on img (which has no id)
         if(e.target.id) {
@@ -149,7 +156,7 @@ function render() {
     else {
         if(moveCount === 9) {
             messageEl.textContent = `Nice try. But it is a tie! `
-            aiMove = false;
+            aiMode = false;
         }
         else if (makeMove){
             player1Turn = !player1Turn;
@@ -168,7 +175,7 @@ function reset() {
     board.forEach(x => x.forEach((x, i, arr) => arr[i] = 0));
     messageEl.textContent = "Welcome to Tic-Tac-Toe";
     imgEl.forEach(x => x.src = "");
-    aiMove = false;
+    aiMode = false;
     document.querySelector("#AI").textContent = "Play VS PC"
     start = false;
     document.querySelector(".board").style.opacity = "0";
@@ -198,7 +205,7 @@ function randomPick(e) {
             player2NameEl.textContent = nameData[randomIndex];
             imgRightEl.src = player2Imag;
             animateCSS('#imgRight', 'bounce');
-            if(aiMove) document.querySelector("#AI").textContent = "😈" + nameData[randomIndex];
+            if(aiMode) document.querySelector("#AI").textContent = "😈" + nameData[randomIndex];
         }
     } 
 }
