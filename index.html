@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="shortcut icon" href="#">
 	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 	<script defer src="./js/app.js" type="module"></script>
@@ -23,15 +24,15 @@
 				</div>
 			</section>
 			<section class="board">
-				<div class="sqr" id="00"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="01"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="02"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="10"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="11"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="12"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="20"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="21"><img class="img1" src="" alt=""></div>
-				<div class="sqr" id="22"><img class="img1" src="" alt=""></div>
+				<div class="sqr" id="sqr00"><img class="img1" id = "img00" src="" alt=""></div>
+				<div class="sqr" id="sqr01"><img class="img1" id = "img01" src="" alt=""></div>
+				<div class="sqr" id="sqr02"><img class="img1" id = "img02" src="" alt=""></div>
+				<div class="sqr" id="sqr10"><img class="img1" id = "img10" src="" alt=""></div>
+				<div class="sqr" id="sqr11"><img class="img1" id = "img11" src="" alt=""></div>
+				<div class="sqr" id="sqr12"><img class="img1" id = "img12" src="" alt=""></div>
+				<div class="sqr" id="sqr20"><img class="img1" id = "img20" src="" alt=""></div>
+				<div class="sqr" id="sqr21"><img class="img1" id = "img21" src="" alt=""></div>
+				<div class="sqr" id="sqr22"><img class="img1" id = "img22" src="" alt=""></div>
 			</section>
 			<section>
 				<div class="playerImag">
@@ -46,15 +47,10 @@
 			<button class="but" id="AI">Play VS PC</button>
 			<button class="but" id="reset">Reset</button>
 		</section>
-		<section class="status">
-			<div id = '0'></div>
-			<div id = '1'></div>
-			<div id = '2'></div>
-			<div id = '3'></div>
-			<div id = '4'></div>
-			<div id = '5'></div>
-			<div id = '6'></div>
-			<div id = '7'></div>
+		<section class="audio">
+			<audio controls loop autoplay>
+				<source src="./css/audio/minionchristmas_song.mp3" type="audio/mp3">
+			</audio>
 		</section>
 	</div>
 </body>

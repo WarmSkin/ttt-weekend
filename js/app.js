@@ -1,7 +1,8 @@
 /*Author: Pin 
-Date: 12/9/2022
-Description: Using 2 dimentional array to represent the ttt board data.
-            Use sum of each direction of board to determine a winner. 
+Date: 12/11/2022
+Description: Using 2 dimentional array to represent the tic-tac-toe board data.
+            Use sum of each direction of board to determine a winner.
+            Build in AI player and background .
 */
 import {imagSrc, nameData} from "./data.js";
 /*-------------------------------- Constants --------------------------------*/
@@ -10,28 +11,28 @@ const board = [
     [0,0,0],
     [0,0,0]
 ]
-
 //winStaus index|| 0,1,2 :horizontal sum of board || 3,4,5: vertical sum || 6,7: cross sum.
 const winStaus = [0,0,0,0,0,0,0,0];
 
-
 /*---------------------------- Variables (state) ----------------------------*/
-let player1Turn = true, playerMoved = false, aiMoved = false, isWin = false, start = false;
-let index1, index2, moveCount = 0, player1Imag, player2Imag, moveValue;
+let player1Turn = true, playerMoved = false, aiMoved = false, isWin = false, start = false, makeMove = false;
+let index1, index2, moveCount = 0, player1Imag = imagSrc[0], player2Imag = imagSrc[1], moveValue;
 let aiMove = false, aiDefence = false, aiAttack = false;
+const clickSoundEl = new Audio();
 
-// const clickSoundEl = new Audio('');
+clickSoundEl.setAttribute("src", "./css/audio/487588__ranner__ui-click.wav")
 
 
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
 let boardEl = document.querySelector(".board");
-// let statusEl = document.querySelector(".status");
 let imgEl = document.querySelectorAll(".img1");
 let player1NameEl = document.querySelector("#bt0");
 let player2NameEl = document.querySelector("#bt1");
 let imgLeftEl = document.querySelector("#imgLeft");
 let imgRightEl = document.querySelector("#imgRight");
+
+player1NameEl.textContent = nameData[0], player2NameEl.textContent = nameData[1];
 
 /*----------------------------- Event Listeners -----------------------------*/
 boardEl.addEventListener('click', play);
@@ -44,42 +45,38 @@ document.querySelector("#start").addEventListener('click', startGame )
 
 
 /*-------------------------------- Functions --------------------------------*/
-player1Imag = imagSrc[0], player2Imag = imagSrc[1];
-player1NameEl.textContent = nameData[0], player2NameEl.textContent = nameData[1];
 
 function startGame(e) {
     start = true;
     document.querySelector(".board").style.opacity = "1";
-    messageEl.textContent = `Game Start! ${player1NameEl.textContent}'s turn`;
+    messageEl.textContent = `Let's Go! ${player1NameEl.textContent}'s turn`;
 }
 
 function aiEnable(e) {
     aiMove = !aiMove;
     let aiPlayer = player1Turn ? player2NameEl : player1NameEl;
     let nameStored = aiPlayer.textContent;
-    if(aiMove){
-        e.target.textContent = `😈${nameStored}`;
-    }
-    else{
-        e.target.textContent = "Play VS AI";
-    }
+    if(aiMove) e.target.textContent = `😈${nameStored}`;
+    else e.target.textContent = "Play VS AI";
 }
 
 function play(e) {
     if(start){
-        // clickSoundEl.play();
         playerMove(e);
+        clickSoundEl.volume = 1;
+        clickSoundEl.play();
         checkWinner();
         render();
 
         //Ai's turn
-        if(aiMove && !isWin){
+        if(aiMove && !isWin && makeMove){
             computerMove();
+            clickSoundEl.volume = 1;
+            clickSoundEl.play();
             checkWinner();
             render();
         }
     }
-    // updateStatusTable();
 }
 
 function playerMove(e){
@@ -94,29 +91,32 @@ function updateGameStatus(e) {
         //double check if it clicked on img (which has no id)
         if(e.target.id) {
         let id = e.target.id;
-        index1 = +id[0];
-        index2 = +id[1];
+        index1 = +id[3];
+        index2 = +id[4];
         }
     }
+    makeMove = false;
 
     if(!board[index1][index2]) {
         moveCount++;
+        makeMove = true;
         moveValue = player1Turn ? 1 : -1;
         if(e) playerMoved = true;
         else aiMoved = true;
-
+        
         //update html block
-        document.getElementById(`${index1}${index2}`).children[0].src = player1Turn ? player1Imag : player2Imag ;
+        let sqrEl = document.getElementById(`sqr${index1}${index2}`).children[0];
+        sqrEl.src = player1Turn ? player1Imag : player2Imag ;
+        animateCSS("#"+sqrEl.id, 'bounceInDown');
+
         //update board data
         board[index1][index2] = moveValue;
 
         //updata winStaus data -- reduced from the checkWinner function below.
         winStaus[index1] += moveValue;
         winStaus[index2 + 3] += moveValue;
-        if(index1 === index2) 
-            winStaus[6] += moveValue;
-        if(index1 + index2 === 2)
-            winStaus[7] += moveValue;
+        if(index1 === index2) {winStaus[6] += moveValue;}
+        if(index1 + index2 === 2) {winStaus[7] += moveValue;}
     }
 }
 
@@ -142,13 +142,16 @@ function render() {
         (`The Winner is ${aiMoved? "😈": ""} ${player1Turn ? player1NameEl.textContent : player2NameEl.textContent} !`)
         confetti.start(1500);
         animateCSS(`${player1Turn ? "#imgLeft" : "#imgRight"}`, 'bounce');
+        clickSoundEl.setAttribute("src", "./css/audio/banana-scream.mp3")
+        clickSoundEl.volume = 1;
+        clickSoundEl.play();
     }
     else {
         if(moveCount === 9) {
             messageEl.textContent = `Nice try. But it is a tie! `
             aiMove = false;
         }
-        else if (playerMoved || aiMoved){
+        else if (makeMove){
             player1Turn = !player1Turn;
             playerMoved = false;
             aiMoved = false;
@@ -175,22 +178,15 @@ function reset() {
     player2Imag = imagSrc[1];
     player1NameEl.textContent = nameData[0];
     player2NameEl.textContent = nameData[1];
-    //reset on board staus
-    // updateStatusTable();
+    clickSoundEl.setAttribute("src", "./css/audio/487588__ranner__ui-click.wav")
 }
-
-// function updateStatusTable() {
-//     for(let i = 0; i < 8; i++)
-//         document.getElementById(`${i}`).textContent = winStaus[i];
-// }
-
 
 //PLAYER PROFILE
 //####################################################################################
 function randomPick(e) {
     if(!start){
         let randomIndex = Math.floor(Math.random()*nameData.length);
-        
+
         if(e.target.id === 'bt0'){
             player1Imag  = imagSrc[randomIndex];
             player1NameEl.textContent = nameData[randomIndex];
@@ -202,63 +198,61 @@ function randomPick(e) {
             player2NameEl.textContent = nameData[randomIndex];
             imgRightEl.src = player2Imag;
             animateCSS('#imgRight', 'bounce');
-            if(aiMove)
-                document.querySelector("#AI").textContent = "😈" + nameData[randomIndex];
+            if(aiMove) document.querySelector("#AI").textContent = "😈" + nameData[randomIndex];
         }
-        
-
-    }
-    
+    } 
 }
 
 //AI
 //####################################################################################
 function computerMove() {
+    //If player didn't pick center, take the center.
     if(moveCount <= 1 && !board[1][1]){
             index1 = 1;
             index2 = 1;
     }
     else{
-        toWinMove();//if there is any move make sum to abs(3) to win
+        toWinMove();
         if(aiDefence)
-            defMove();//check if there is any move make sum of 3, or 2 sums of 2.
+            defMove();
             if(aiAttack)
-                attackMove();//check if there is any move make 2 sums of 2. if not, make the most sum move.
+                attackMove();
     }
     updateGameStatus();
 }
 
+//If there is a move cound reach winning(abs(3)), take the move.
 function toWinMove() {
     moveValue = player1Turn ? 1 : -1;
     simulateWinMove(1,3);
-    //if the function didn't break, then we didn't find wining move, we need to defence.
-    console.log("toWinMove");
 }
 
+//Take counter move if the opponent is going to win.
 function defMove() {
-    moveValue = player1Turn ? -1 : 1;
+    moveValue = player1Turn ? -1 : 1; //think as opponent
     simulateWinMove(1,3);
-    console.log("def stage 1");
-    if(aiDefence){
+    //if the opponent is not winning on next round 
+    //check if we could get a two abs(2) sum -- wich will likely win in next 2 round 
+    if(aiAttack){
         moveValue = - moveValue;
         simulateWinMove(2,2);
-        console.log("def stage 2");
     }
+    //check if we need to stop opponent's next 2 abs(2) stage
     if(aiDefence){
         moveValue = -moveValue;
         simulateWinMove(2,2);
-        console.log("def stage 3");
     }
     moveValue = -moveValue;
-    console.log("defMove");
 }
 
 function attackMove() {
     simulateWinMove(1,2);
-    if(attackMove)
-        simulateWinMove(1,1)
-    console.log("attackMove");
+    //if there is no target 2, then look for target 1
+    if(attackMove) simulateWinMove(1,1)
 }
+
+//targetNumber: the sum we want to check from the 8 winning sums
+//targetCount: how many sums in the 8 winning, reach the targetNumber
 function simulateWinMove(targetCount, targetNumber) {
     let count = 0;
     let indexFound = false;
@@ -271,16 +265,16 @@ function simulateWinMove(targetCount, targetNumber) {
                 if(Math.abs(winStaus[index2 + 3] + moveValue) === targetNumber) count++;
                 if(index1 === index2 &&(Math.abs(winStaus[6] + moveValue) === targetNumber)) count++;
                 if(index1 + index2 === 2 && (Math.abs(winStaus[7] + moveValue) === targetNumber)) count++;
-                if(count >= targetCount) {indexFound = true; break;}
-                count = 0;
-            }
+                if(count >= targetCount) {indexFound = true; break;} 
+            } 
+            count = 0;  //reset count when simulated each element
         }
+        
         if (indexFound === true) {
             aiDefence = false; 
             aiAttack = false; 
             break; }
     }
-    // console.log(aiAttack);
 }
 
 
