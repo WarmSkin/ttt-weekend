@@ -53,11 +53,13 @@ function startGame(e) {
 }
 
 function aiEnable(e) {
+    if(!start){
     aiMode = !aiMode;
     let aiPlayer = player1Turn ? player2NameEl : player1NameEl;
     let nameStored = aiPlayer.textContent;
     if(aiMode) e.target.textContent = `😈${nameStored}`;
     else e.target.textContent = "Play VS AI";
+    }
 }
 
 function play(e) {
