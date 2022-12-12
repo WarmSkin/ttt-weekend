@@ -53,13 +53,11 @@ function startGame(e) {
 }
 
 function aiEnable(e) {
-    if(!start){
     aiMode = !aiMode;
     let aiPlayer = player1Turn ? player2NameEl : player1NameEl;
     let nameStored = aiPlayer.textContent;
     if(aiMode) e.target.textContent = `😈${nameStored}`;
     else e.target.textContent = "Play VS AI";
-    }
 }
 
 function play(e) {
@@ -265,7 +263,7 @@ function defMove() {
 }
 
 function specialCase() {
-    if((board[0][0] === 1 && board[2][2] === 1) || (board[0][2] === 1 && board[2][0] === 1)){
+    if((board[0][0] && board[0][0] === board[2][2] ) || (board[0][2] && board[0][2] === board[2][0] )){
         index1 = 0, index2 = 1;
         aiAttack = false, aiDefence = false;
     }
