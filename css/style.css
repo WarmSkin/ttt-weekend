@@ -4,7 +4,7 @@
 } */
 body {
   background-color: gray;
-  background-image: url(https://www.gifcen.com/wp-content/uploads/2022/04/wallpaper-gif-4.gif);
+  background-image: url(https://wallpapers.com/images/hd/minions-celebrating-together-3wxim1i2egqb5my9.jpg);
   background-size: cover;
   background-position: center;
 	/* Use a system font, if none are available use an available sans-sarif   font */
@@ -28,6 +28,7 @@ section.board {
   grid-template-columns: repeat(3, 20vmin);
   grid-gap: 0vmin;
   align-self: center;
+  opacity: 0%;
 }
 
 section .sqr{
@@ -36,6 +37,7 @@ section .sqr{
   text-align: center;
   vertical-align: middle;
   border-radius: 360%;
+  background-color: rgb(247, 202, 80);
 }
 
 section.But {
@@ -83,8 +85,4 @@ body .status {
   margin: 60px;
   border: 5px solid rgb(175, 13, 16);
   border-radius: 360%;
-}
-
-.board {
-  opacity: 0%;
 }

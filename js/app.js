@@ -20,6 +20,8 @@ let player1Turn = true, playerMoved = false, aiMoved = false, isWin = false, sta
 let index1, index2, moveCount = 0, player1Imag, player2Imag, moveValue;
 let aiMove = false, aiDefence = false, aiAttack = false;
 
+// const clickSoundEl = new Audio('');
+
 
 /*------------------------ Cached Element References ------------------------*/
 let messageEl = document.getElementById("message");
@@ -65,6 +67,7 @@ function aiEnable(e) {
 
 function play(e) {
     if(start){
+        // clickSoundEl.play();
         playerMove(e);
         checkWinner();
         render();
@@ -88,9 +91,12 @@ function playerMove(e){
 function updateGameStatus(e) {
     //if it is not aiMove, geting indexs from click target
     if(e){
+        //double check if it clicked on img (which has no id)
+        if(e.target.id) {
         let id = e.target.id;
         index1 = +id[0];
         index2 = +id[1];
+        }
     }
 
     if(!board[index1][index2]) {
@@ -163,6 +169,12 @@ function reset() {
     document.querySelector("#AI").textContent = "Play VS PC"
     start = false;
     document.querySelector(".board").style.opacity = "0";
+    imgLeftEl.src = imagSrc[0];
+    imgRightEl.src = imagSrc[1];
+    player1Imag = imagSrc[0]; 
+    player2Imag = imagSrc[1];
+    player1NameEl.textContent = nameData[0];
+    player2NameEl.textContent = nameData[1];
     //reset on board staus
     // updateStatusTable();
 }
