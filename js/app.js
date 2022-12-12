@@ -68,6 +68,7 @@ function play(e) {
             aiComputerPlay();
         }
     }
+    console.log(winStaus)
 }
 
 function playerPlay(e) {
@@ -238,7 +239,11 @@ function toWinMove() {
 function defMove() {
     moveValue = player1Turn ? -1 : 1; //think as opponent
     simulateWinMove(1,3);
-    //if the opponent is not winning on next round 
+    //if the opponent is not winning on next round
+    //special case when opponent places on a line up conners in first two move.
+    if(aiDefence){
+        specialCase();
+    }
     //check if we could get a two abs(2) sum -- wich will likely win in next 2 round 
     if(aiAttack){
         moveValue = - moveValue;
@@ -250,6 +255,14 @@ function defMove() {
         simulateWinMove(2,2);
     }
     moveValue = -moveValue;
+}
+
+function specialCase() {
+    if((board[0][0] && board[2][2]) || (board[0][2] && board[2][0])){
+        index1 = 0, index2 = 1;
+        aiAttack = false, aiDefence = false;
+    }
+    console.log("special")
 }
 
 function attackMove() {
